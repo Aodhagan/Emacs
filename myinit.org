@@ -1,0 +1,494 @@
+* Themes
+** zerodark-theme
+#+BEGIN_SRC emacs-lisp
+  (use-package zerodark-theme
+    :ensure t
+    :init
+      (load-theme 'zerodark t))
+#+END_SRC
+** spacemacs theme
+#+BEGIN_SRC emacs-lisp
+  ;; (unless (package-installed-p 'spacemacs-theme)
+  ;;   (package-refresh-contents)
+  ;;   (package-install 'spacemacs-theme))
+#+END_SRC
+** zenburn
+Nice dark colour theme
+#+BEGIN_SRC emacs-lisp
+  ;; (use-package zenburn-theme
+  ;;  :ensure t
+  ;;   :config (load-theme 'zenburn t))
+#+END_SRC
+
+** Monokai Theme
+#+BEGIN_SRC emacs-lisp
+  ;; (use-package monokai-theme
+  ;;   :ensure t)
+ #+END_SRC
+
+** cyberpunk theme
+#+BEGIN_SRC emacs-lisp
+  ;; (use-package cyberpunk-theme
+  ;;   :ensure t)
+#+END_SRC
+* Which key
+Brings up some help regarding keybindings
+#+BEGIN_SRC emacs-lisp
+  (use-package which-key
+    :ensure t
+    :init
+    (which-key-mode))
+#+END_SRC
+* Org
+** common settings
+indents subheadings in org mode to increase readability
+#+BEGIN_SRC emacs-lisp
+(add-hook 'org-mode-hook 'org-indent-mode)
+#+END_SRC
+** basic config
+Move to a separate buffer when editing an SRC 
+code block with C-c '
+#+BEGIN_SRC emacs-lisp
+  (setq org-src-window-setup 'current-window)
+#+END_SRC
+** Org bullets
+Makes bullet points in org mode bigger
+#+BEGIN_SRC emacs-lisp
+  (use-package org-bullets
+    :ensure t
+    :config
+    (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+#+END_SRC
+** elisp SRC codeblock snippet
+#+BEGIN_SRC emacs-lisp
+  (setq org-src-window-setup 'current-window)
+  (add-to-list 'org-structure-template-alist
+	       '("el" "#+BEGIN_SRC emacs-lisp\n?\n#+END_SRC"))
+#+END_SRC
+* Avy
+  Package for efficient movement of cursor by character search within screen
+#+BEGIN_SRC emacs-lisp
+  (use-package avy
+    :ensure t
+    :bind ("M-s" . avy-goto-char))
+#+END_SRC
+* Swiper
+Used for search buffer C-s
+#+BEGIN_SRC emacs-lisp
+  (use-package swiper
+    :ensure t
+    :bind ("C-s" . swiper))
+#+END_SRC
+* ESS
+package for using R in Emacs
+#+BEGIN_SRC emacs-lisp
+(use-package ess
+  :ensure t)
+#+END_SRC
+
+* Dashboard
+  Dashboard when emacs startsup highlighting recent files
+#+BEGIN_SRC emacs-lisp
+  (use-package dashboard
+    :ensure t
+    :config
+    (dashboard-setup-startup-hook)
+    (setq dashboard-items '((recents . 10)))
+    (setq dashboard-banner-logo-title "Bingo Bango!"))
+#+END_SRC
+* Modeline
+** deminish minor mode list
+   #+BEGIN_SRC emacs-lisp
+     (use-package diminish
+       :ensure t
+       :init
+       (diminish 'hungry-delete-mode)
+       (diminish 'which-key-mode)
+       (diminish 'subword-mode)
+       (diminish 'yas-minor-mode))
+   #+END_SRC
+** spaceline
+#+BEGIN_SRC emacs-lisp
+  (use-package spaceline
+    :ensure t
+    :config
+    (require 'spaceline-config)
+    (setq powerline-default-separator (quote arrow))
+    (spaceline-spacemacs-theme))
+#+END_SRC
+* Symon
+performace monitor
+#+BEGIN_SRC emacs-lisp
+  (use-package symon
+    :ensure t
+    :init
+    (symon-mode t))
+#+END_SRC
+
+* Hungry delete
+Package for deleting multiple white space characters
+#+BEGIN_SRC emacs-lisp
+  (use-package hungry-delete
+    :ensure t
+    :config (global-hungry-delete-mode))
+#+END_SRC
+* Interface tweaks
+ Minor changes to interface
+#+BEGIN_SRC emacs-lisp
+;; deletes default emacs statup screen
+(setq inhibit-startup-message t)
+
+;; remove toolbar
+(tool-bar-mode -1)
+
+;; change yes or no option to y or n to save typing
+(defalias 'yes-or-no-p 'y-or-n-p) 
+
+;; press f5 to reload buffer after changing configuration i.e. execute 'revert-buffer' command
+(global-set-key (kbd "<f5>") 'revert-buffer)
+
+;; highlight cursor
+(global-hl-line-mode t)
+
+#+END_SRC
+
+* Emacs minor settings
+** display time
+   #+BEGIN_SRC emacs-lisp
+   (setq display-time-24hr-format t)
+   (display-time-mode 1)
+   #+END_SRC
+** set default directory
+Sets the default directory when searching or opening a file
+#+BEGIN_SRC emacs-lisp
+(setq default-directory "C:/Users/Mike/Documents")
+#+END_SRC
+** scroll line by line
+allows Emacs scroll line by line (uncle dave video 5)
+#+BEGIN_SRC emacs-lisp
+(setq scroll-conservatively 100)
+#+END_SRC
+
+** set other window command to M-o
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "M-o") 'other-window)
+#+END_SRC
+
+** disable audio error Bell
+#+BEGIN_SRC emacs-lisp
+(setq ring-bell-function 'ignore)
+#+END_SRC
+
+** set C-x b to use ibuffer
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "C-x b") 'ibuffer)
+#+END_SRC
+
+** Set default file path when opening files
+#+BEGIN_SRC emacs-lisp
+  (setq default-directory "C:/Users/Mike/Documents")
+#+END_SRC
+** Switch to other window when splitting windows
+#+BEGIN_SRC emacs-lisp
+(defun split-and-follow-horizontally ()
+  (interactive)
+  (split-window-below)
+  (balance-windows)
+  (other-window 1))
+  (global-set-key (kbd "C-x 2") 'split-and-follow-horizontally)
+
+(defun split-and-follow-vertically ()
+  (interactive)
+  (split-window-right)
+  (balance-windows)
+  (other-window 1))
+  (global-set-key (kbd "C-x 3") 'split-and-follow-vertically)
+#+END_SRC
+
+** fix auto tabbing bug by turning off electric indent mode
+#+BEGIN_SRC emacs-lisp
+(electric-indent-mode -1)
+#+END_SRC
+
+** turn off windows bell sound occuring in emacs
+ #+BEGIN_SRC emacs-lisp
+   (setq visible-bell 1)
+ #+END_SRC
+
+** subword navigation
+Can navigate within camelCase using M-b, M-f
+#+BEGIN_SRC emacs-lisp
+(global-subword-mode 1)
+#+END_SRC
+** electric completion parens
+Autocompletes parentheses
+#+BEGIN_SRC emacs-lisp
+  (setq electric-pair-pairs '(
+			      (?\( . ?\))
+			      (?\[ . ?\])
+			      ))
+  (electric-pair-mode t)
+#+END_SRC
+** show lines and columns on the modeline
+#+BEGIN_SRC emacs-lisp
+  (line-number-mode 1)
+  (column-number-mode 1)
+#+END_SRC
+* AUCTeX (commented out) 
+#+BEGIN_SRC emacs-lisp
+  ;; ;;; auctex settings
+  ;; (server-start)
+  ;; (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
+  ;; (setq reftex-plug-into-AUCTeX t)
+
+
+  ;; ;set spell checker in emacs as 'aspell as recommended by auctex install blog post
+  ;; (setq-default ispell-program-name "aspell")
+
+
+  ;; ;autosave buffer upon modification
+  ;; ;(defun savebuf(begin end length)
+  ;;   ;(if (and (buffer-file-name) (buffer-modified-p))
+  ;;  ;      (save-buffer)))
+  ;; ;(add-hook 'after-change-functions 'savebuf)
+
+  ;; ;;Eliminates the necessity for the save command before compilation is completed
+  ;; (setq TeX-save-query nil)
+
+  ;; ;;Function that combines two commands 1. revert pdfoutput buffer 2. pdf-outline
+  ;; (defun my-TeX-revert-document-buffer (file)
+  ;;   (TeX-revert-document-buffer file)
+  ;;   (pdf-outline))
+
+  ;; ;; Add custom function to the TeX compilation hook
+  ;; (add-hook 'TeX-after-compilation-finished-functions #'my-TeX-revert-document-buffer)
+ #+END_SRC
+
+** Allow normal tab behaviour in a latex mode
+   #+BEGIN_SRC emacs-lisp
+
+ (add-hook 'LaTeX-mode-hook
+           (lambda ()
+             (setq indent-tabs-mode t
+                   indent-line-function 'indent-relative)))
+  
+   #+END_SRC
+* IDO
+  Buffer navigation package making transition between buffers easier
+** install IDO package
+enable IDO mode
+enables flex pattern matching when searching for buffers
+#+BEGIN_SRC emacs-lisp
+(setq ido-enable-flex-matching t)
+(setq ido-create-new-buffer 'always)
+(setq ido-everywhere t)
+(ido-mode 1)
+#+END_SRC
+
+Uses ibuffer instead of list-buffers
+Zemansky lesson 4 'buffers'
+#+BEGIN_SRC 
+(defalias 'list-buffers 'ibuffer)
+;; (defalias 'list-buffers 'ibuffer-other-window)
+#+END_SRC
+
+** edit C-x C-b to use IDO
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "C-x C-b") 'ido-switch-buffer)
+#+END_SRC
+** install and activate IDO vertical mode
+ #+BEGIN_SRC emacs-lisp
+; install IDO vertical mode
+(use-package ido-vertical-mode
+  :ensure t
+  :init
+  (ido-vertical-mode 1)) 
+ #+END_SRC
+
+** configure key bindings for navigating vertical mode
+#+BEGIN_SRC emacs-lisp
+(setq ido-vertical-define-keys 'C-n-and-C-p-only)
+#+END_SRC
+* smex
+an enhancement of the M-x command 
+i.e.,  auto-completion for searching functions
+#+BEGIN_SRC emacs-lisp
+; install 'smex' IDO behavior for M-x command
+(use-package smex
+  :ensure t
+  :init (smex-initialize)
+  :bind
+  ("M-x" . smex))
+#+END_SRC
+
+* Switch-Window
+  package for nevigating multiple windows
+#+BEGIN_SRC emacs-lisp
+  (use-package switch-window
+    :ensure t
+    :config
+    (setq switch-window-input-style 'minibuffer)
+    (setq switch-window-increase 4)
+    (setq switch-window-threshold 2)
+    (setq switch-window-shortcut-style 'qwerty)
+    (setq switch-window-qwerty-shortcuts
+	  '("a" "s" "d" "f" "j" "k" "l"))
+    :bind
+    ([remap other-window] . switch-window))
+#+END_SRC
+* pdftools (commented out)
+#+BEGIN_SRC emacs-lisp
+  ;; (use-package pdf-tools   
+  ;;    :ensure t
+  ;;    :config   
+  ;;    (pdf-tools-install)
+  ;;    (setq TeX-view-program-selection '((output-pdf "pdf-tools")))   
+  ;;    (setq TeX-view-program-list '(("pdf-tools" "TeX-pdf-tools-sync-view"))))
+#+END_SRC
+
+* list installed packages
+command for listing all installed packages (https://emacs.stackexchange.com/questions/13824/how-to-get-the-package-name-of-current-using-theme)
+#+BEGIN_SRC emacs-lisp
+(mapcar 'car package-alist)
+#+END_SRC
+
+* Latex Preview Pane (commented out)
+#+BEGIN_SRC emacs-lisp
+;; (use-package latex-preview-pane
+  ;;  :ensure t)
+  ;; (latex-preview-pane-enable)
+#+END_SRC
+
+* Config edit/reload functions
+functions for quickly accessing and reloading config file
+#+BEGIN_SRC emacs-lisp
+  (defun config-visit ()
+    (interactive)
+    (find-file "~/.emacs.d/myinit.org"))
+  (global-set-key (kbd "C-c e") 'config-visit)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (defun config-reload ()
+    (interactive)
+    (org-babel-load-file (expand-file-name "~/.emacs.d/myinit.org")))
+  (global-set-key (kbd "C-c r") 'config-reload)
+
+#+END_SRC
+
+* Custom key bindings
+** custom key command for creating new buffer for creating snippet
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "C-c n") 'switch-to-buffer)
+#+END_SRC
+
+** key command for 'other-window'
+   #+BEGIN_SRC emacs-lisp
+   (global-set-key (kbd "M-o") 'other-window)
+   
+   #+END_SRC
+* Convenient functions
+** kill-whole-word
+#+BEGIN_SRC emacs-lisp
+  (defun kill-whole-word ()
+    (interactive)
+    (backward-word)
+    (kill-word 1))
+  (global-set-key (kbd "C-c w w") 'kill-whole-word)
+
+#+END_SRC
+** kill-current-buffer
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "C-x k") 'kill-this-buffer)
+#+END_SRC
+
+** copy-whole-line
+#+BEGIN_SRC emacs-lisp
+  (defun copy-whole-line ()
+    (interactive)
+    (save-excursion
+      (kill-new
+       (buffer-substring
+	(point-at-bol)
+	(point-at-eol)))))
+  (global-set-key (kbd "C-c w l") 'copy-whole-line)
+#+END_SRC
+* Yasnippet
+** snippet package
+    #+BEGIN_SRC emacs-lisp
+    (use-package yasnippet
+        :ensure t
+        :config 
+        (use-package yasnippet-snippets
+             :ensure t)
+        (require 'yasnippet)
+        (yas-reload-all))
+(global-set-key (kbd "C-c n") 'yas-new-snippet)
+    #+END_SRC
+** command to allow nested snippets
+#+BEGIN_SRC emacs-lisp
+(setq yas-triggers-in-field t)
+#+END_SRC
+* Rainbow delimiters
+#+BEGIN_SRC emacs-lisp
+  (use-package rainbow-delimiters
+     :ensure t
+     :init
+     (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
+#+END_SRC
+* Auto-complete
+Auto-complete package
+#+BEGIN_SRC emacs-lisp
+  (use-package auto-complete
+    :ensure t
+    :init
+    (progn
+	 (ac-config-default)
+	 (global-auto-complete-mode t)
+	 ))
+#+END_SRC
+Company auto complete package
+#+BEGIN_SRC emacs-lisp
+  ;; (use-package company
+  ;;   :ensure t
+  ;;   :init
+  ;;   (add-hook 'after-init-hook ' global-company-mode))
+#+End_SRC
+* Pomidor
+Pomodoro timer
+#+BEGIN_SRC emacs-lisp
+  (use-package pomidor
+    :ensure t
+    :config 
+    (setq pomidor-sound-tick 1
+                pomidor-sound-tack nil))
+(global-set-key (kbd "<f12>") #'pomidor)
+#+END_SRC
+* Popup Kill Ring
+Easy access of kill ring items
+#+BEGIN_SRC emacs-lisp
+  (use-package popup-kill-ring
+    :ensure t
+    :bind ("M-y" . popup-kill-ring))
+#+END_SRC
+* Mark-multiple
+  Highlights multiple iterations of same string
+#+BEGIN_SRC emacs-lisp
+  (use-package mark-multiple
+    :ensure t
+    :bind ("C-c q" . mark-next-like-this))
+#+END_SRC
+* expand-region
+  Expands the highlighted region of text
+#+BEGIN_SRC emacs-lisp
+  (use-package expand-region
+    :ensure t
+    :bind ("C-q" . er/expand-region))
+#+END_SRC
+* Magit
+Git version control front end for emacs
+#+BEGIN_SRC emacs-lisp
+  ;;   (use-package magit
+  ;;     :ensure t)
+  ;; (global-set-key (kbd "C-c m") 'magit-status)
+#+END_SRC
