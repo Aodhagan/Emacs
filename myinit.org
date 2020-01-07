@@ -83,9 +83,15 @@ Used for search buffer C-s
 package for using R in Emacs
 #+BEGIN_SRC emacs-lisp
 (use-package ess
-  :ensure t)
+  :ensure t
+  :init
+  (require 'ess-site))
 #+END_SRC
-
+code for auto completion engine while using ESS
+#+BEGIN_SRC emacs-lisp
+  (setq ess-tab-complete-in-script 't)
+  (setq ess-company 't)
+#+END_SRC
 * Dashboard
   Dashboard when emacs startsup highlighting recent files
 #+BEGIN_SRC emacs-lisp
@@ -387,6 +393,10 @@ functions for quickly accessing and reloading config file
    (global-set-key (kbd "M-o") 'other-window)
    
    #+END_SRC
+** change c-t to c-x to make Dvorak layout easier in Emacs
+#+BEGIN_SRC emacs-lisp
+(keyboard-translate ?\C-t ?\C-x)
+#+END_SRC
 * Convenient functions
 ** kill-whole-word
 #+BEGIN_SRC emacs-lisp
@@ -439,21 +449,15 @@ functions for quickly accessing and reloading config file
 * Auto-complete
 Auto-complete package
 #+BEGIN_SRC emacs-lisp
-  (use-package auto-complete
-    :ensure t
-    :init
-    (progn
-	 (ac-config-default)
-	 (global-auto-complete-mode t)
-	 ))
-#+END_SRC
-Company auto complete package
-#+BEGIN_SRC emacs-lisp
-  ;; (use-package company
+  ;; (use-package auto-complete
   ;;   :ensure t
   ;;   :init
-  ;;   (add-hook 'after-init-hook ' global-company-mode))
-#+End_SRC
+  ;;   (progn
+  ;;        (ac-config-default)
+  ;;        (global-auto-complete-mode t)
+  ;;        ))
+#+END_SRC
+
 * Pomidor
 Pomodoro timer
 #+BEGIN_SRC emacs-lisp
@@ -491,4 +495,31 @@ Git version control front end for emacs
   ;;   (use-package magit
   ;;     :ensure t)
   ;; (global-set-key (kbd "C-c m") 'magit-status)
+#+END_SRC
+* Company
+** install company mode for auto completion
+#+BEGIN_SRC emacs-lisp
+    (use-package company
+      :ensure t
+      :config
+      (setq company-idle-delay 0)
+      (setq company-minimum-prefix-length 3)
+      (global-company-mode t))
+
+  ; use the tab key to scroll through auto complete options
+    (eval-after-load 'company
+      '(progn
+         (define-key company-active-map (kbd "TAB") 'company-complete-common-or-cycle)
+         (define-key company-active-map (kbd "<tab>") 'company-complete-common-or-cycle)))
+
+  ; use C-n, C-p to scroll through auto complete options
+    (with-eval-after-load 'company
+      (define-key company-active-map (kbd "M-n") nil)
+      (define-key company-active-map (kbd "M-p") nil)
+      (define-key company-active-map (kbd "C-n") #'company-select-next)
+      (define-key company-active-map (kbd "C-p") #'company-select-previous))
+#+END_SRC
+** cancel autocomplete selections in company by typing nonmatching characters
+#+BEGIN_SRC emacs-lisp
+(setq company-require-match 'never)
 #+END_SRC
